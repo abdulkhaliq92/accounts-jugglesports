@@ -9,6 +9,8 @@ import nodemailer from 'nodemailer'
 import pdf from 'html-pdf'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+const puppeteer = require('puppeteer');
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -95,20 +97,24 @@ app.post('/send-pdf', (req, res) => {
 //     });
 // });
 
-app.post('/create-pdf', (req, res) => {
+app.post('/create-pdf', async (req, res) => {
     console.log(req.body);
-    
-    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
-        if (err) {
-            // Handle the error, but don't send the response inside this callback
-            console.error(err);
-            res.status(500).send('Error creating PDF'); // Adjust the status and message as needed
-        } else {
-            // The PDF was successfully created, send a success response
-            console.log('PDF created successfully');
-            res.status(200).send('PDF created successfully'); // Adjust the status and message as needed
-        }
-    });
+
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        const content = pdfTemplate(req.body);
+
+        await page.setContent(content);
+        await page.pdf({ path: 'invoice.pdf', format: 'A4' });
+
+        await browser.close();
+
+        res.status(200).send('PDF created successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error creating PDF');
+    }
 });
 
 //SEND PDF INVOICE

@@ -110,6 +110,7 @@ app.post('/create-pdf', async (req, res) => {
     const browser = await puppeteer.launch({
         executablePath: 'chrome',  // Use the bundled version
         headless: "new",  // Opt-in to the new Headless mode
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Add necessary arguments
     });
 
     try {

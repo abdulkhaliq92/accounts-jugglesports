@@ -9,6 +9,8 @@ import nodemailer from 'nodemailer'
 import pdf from 'html-pdf'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import puppeteer from 'puppeteer';
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -85,19 +87,39 @@ app.post('/send-pdf', (req, res) => {
 
 //CREATE AND SEND PDF INVOICE
 //CREATE AND SEND PDF INVOICE
-app.post('/create-pdf', (req, res) => {
+// app.post('/create-pdf', (req, res) => {
+//     console.log(req.body);
+
+//     // Generate PDF and handle the response
+//     pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err, result) => {
+//         if (err) {
+//             console.error(err);
+//             res.status(500).json({ error: 'Error generating PDF' });
+//         } else {
+//             console.log(result);  // Log additional details if needed
+//             res.status(200).json({ success: true, message: 'PDF generated successfully' });
+//         }
+//     });
+// });
+
+app.post('/create-pdf', async (req, res) => {
     console.log(req.body);
 
-    // Generate PDF and handle the response
-    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Error generating PDF' });
-        } else {
-            console.log(result);  // Log additional details if needed
-            res.status(200).json({ success: true, message: 'PDF generated successfully' });
-        }
-    });
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        const content = pdfTemplate(req.body);
+
+        await page.setContent(content);
+        await page.pdf({ path: 'invoice.pdf', format: 'A4' });
+
+        await browser.close();
+
+        res.status(200).json({ success: true, message: 'PDF generated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error generating PDF' });
+    }
 });
 
 

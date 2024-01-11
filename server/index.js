@@ -84,13 +84,30 @@ app.post('/send-pdf', (req, res) => {
 // npm link phantomjs-prebuilt
 
 //CREATE AND SEND PDF INVOICE
+//CREATE AND SEND PDF INVOICE
+// app.post('/create-pdf', (req, res) => {
+//     console.log(req.body);
+//     pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
+//         if(err) {
+//             res.send(Promise.reject());
+//         }
+//         res.send(Promise.resolve());
+//     });
+// });
+
 app.post('/create-pdf', (req, res) => {
     console.log(req.body);
+    
     pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
-        if(err) {
-            res.send(Promise.reject());
+        if (err) {
+            // Handle the error, but don't send the response inside this callback
+            console.error(err);
+            res.status(500).send('Error creating PDF'); // Adjust the status and message as needed
+        } else {
+            // The PDF was successfully created, send a success response
+            console.log('PDF created successfully');
+            res.status(200).send('PDF created successfully'); // Adjust the status and message as needed
         }
-        res.send(Promise.resolve());
     });
 });
 

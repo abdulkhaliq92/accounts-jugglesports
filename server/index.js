@@ -9,7 +9,7 @@ import nodemailer from 'nodemailer'
 import pdf from 'html-pdf'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
 
 const __filename = fileURLToPath(import.meta.url)

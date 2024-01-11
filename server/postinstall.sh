@@ -19,6 +19,7 @@ chmod +x ./phantomjs/bin/phantomjs
 export PATH=./phantomjs/bin:$PATH
 
 # Install other dependencies or run additional setup steps as needed
+npm install phantomjs-prebuilt
 
 # Run your npm commands or other setup steps
 npm install html-pdf -g

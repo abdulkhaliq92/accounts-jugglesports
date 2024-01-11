@@ -18,13 +18,13 @@ chmod +x ./phantomjs/bin/phantomjs
 # Set the PATH variable to include the directory with PhantomJS
 export PATH=./phantomjs/bin:$PATH
 
-# Install other dependencies or run additional setup steps as needed
+# Install other dependencies
 npm install phantomjs-prebuilt
+
+# Set the PATH variable permanently in the environment (for future use)
+echo 'export PATH=./phantomjs/bin:$PATH' >> ~/.bashrc
 
 # Run your npm commands or other setup steps
 npm install html-pdf -g
 npm link html-pdf
 npm link phantomjs-prebuilt
-
-# Clean up the PhantomJS directory if needed
-# rm -rf ./phantomjs

@@ -9,8 +9,6 @@ import nodemailer from 'nodemailer'
 import pdf from 'html-pdf'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-import puppeteer from 'puppeteer';
-
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -87,34 +85,14 @@ app.post('/send-pdf', (req, res) => {
 
 //CREATE AND SEND PDF INVOICE
 //CREATE AND SEND PDF INVOICE
-// app.post('/create-pdf', (req, res) => {
-//     console.log(req.body);
-//     pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
-//         if(err) {
-//             res.send(Promise.reject());
-//         }
-//         res.send(Promise.resolve());
-//     });
-// });
-
-app.post('/create-pdf', async (req, res) => {
+app.post('/create-pdf', (req, res) => {
     console.log(req.body);
-
-    try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        const content = pdfTemplate(req.body);
-
-        await page.setContent(content);
-        await page.pdf({ path: 'invoice.pdf', format: 'A4' });
-
-        await browser.close();
-
-        res.status(200).send('PDF created successfully');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error creating PDF');
-    }
+    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
+        if(err) {
+            res.send(Promise.reject());
+        }
+        res.send(Promise.resolve());
+    });
 });
 
 //SEND PDF INVOICE

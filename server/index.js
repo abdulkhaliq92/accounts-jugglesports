@@ -87,13 +87,19 @@ app.post('/send-pdf', (req, res) => {
 //CREATE AND SEND PDF INVOICE
 app.post('/create-pdf', (req, res) => {
     console.log(req.body);
-    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
-        if(err) {
-            res.send(Promise.reject());
+
+    // Generate PDF and handle the response
+    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Error generating PDF' });
+        } else {
+            console.log(result);  // Log additional details if needed
+            res.status(200).json({ success: true, message: 'PDF generated successfully' });
         }
-        res.send(Promise.resolve());
     });
 });
+
 
 //SEND PDF INVOICE
 app.get('/fetch-pdf', (req, res) => {

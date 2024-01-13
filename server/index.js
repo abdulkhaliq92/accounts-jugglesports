@@ -87,45 +87,22 @@ app.post('/send-pdf', (req, res) => {
 
 //CREATE AND SEND PDF INVOICE
 //CREATE AND SEND PDF INVOICE
-// app.post('/create-pdf', (req, res) => {
-//     console.log(req.body);
-
-//     // Generate PDF and handle the response
-//     pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err, result) => {
-//         if (err) {
-//             console.error(err);
-//             res.status(500).json({ error: 'Error generating PDF' });
-//         } else {
-//             console.log(result);  // Log additional details if needed
-//             res.status(200).json({ success: true, message: 'PDF generated successfully' });
-//         }
-//     });
-// });
-
-// Inside your route handler or where you launch Puppeteer
-app.post('/create-pdf', async (req, res) => {
+app.post('/create-pdf', (req, res) => {
     console.log(req.body);
 
     // Generate PDF and handle the response
-    const browser = await puppeteer.launch({
-        executablePath: 'chrome',  // Use the bundled version
-        headless: "new",  // Opt-in to the new Headless mode
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Add necessary arguments
+    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Error generating PDF' });
+        } else {
+            console.log(result);  // Log additional details if needed
+            res.status(200).json({ success: true, message: 'PDF generated successfully' });
+        }
     });
-
-    try {
-        const result = await browser.newPage();
-        await result.setContent('<h1>Hello, world!</h1>');
-        const pdf = await result.pdf();
-        res.contentType("application/pdf");
-        res.send(pdf);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error generating PDF' });
-    } finally {
-        await browser.close();
-    }
 });
+
+
 
 
 //SEND PDF INVOICE

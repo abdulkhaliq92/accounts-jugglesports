@@ -30,6 +30,7 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import Modal from '../Payments/Modal'
 import PaymentHistory from './PaymentHistory'
+import Logo from '../svgIcons/Logo'
 
 const InvoiceDetails = () => {
 
@@ -253,10 +254,11 @@ if(!invoice) {
             )
             : (
               <>
-              {company?.logo ? <img src={'https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png'} style={{width:'100%'}} alt="Logo" className={styles.logo} /> 
+              {/* {company?.logo ? <img src={'https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png'} style={{width:'100%'}} alt="Logo" className={styles.logo} /> 
               :
               <h2>{company?.name}</h2>
-              }
+              } */}
+              <Logo width={'100%'} />
               </>
                 // <Grid item onClick={() => history.push('/settings')} style={{cursor: 'pointer'}}>
                 //     {company?.logo ? <img src={'https://i.ibb.co/rQMLWds/juggle-sports-logo.png'} style={{width:'100%'}} alt="Logo" className={styles.logo} /> 

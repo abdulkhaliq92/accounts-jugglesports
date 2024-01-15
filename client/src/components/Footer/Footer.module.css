@@ -6,5 +6,7 @@
     padding: 25px;
     text-align: center;
     background-color: #EEEEEE;
+    position:fixed;
+    bottom:0;
   }
 

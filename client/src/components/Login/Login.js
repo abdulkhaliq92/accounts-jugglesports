@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { createProfile } from '../../actions/profile'
 import { useSnackbar } from 'react-simple-snackbar'
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Logo from '../svgIcons/Logo'
 
 
 const initialState ={ firstName: '', lastName: '', email: '', password: '', confirmPassword: '', profilePicture: '', bio: ''}
@@ -76,7 +76,10 @@ const Login = () => {
 
     return (
     <>
-      <center><img style={{width: '500px', marginTop: '65px'}} src="https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png" alt="arc-invoice" /></center>
+      <center>  
+        <Logo width={1000} style={{marginTop: '60px'}} />
+        <h1 style={{marginTop: '20px'}}>Invoicing System</h1>
+      </center>
 
         <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevation={2}>

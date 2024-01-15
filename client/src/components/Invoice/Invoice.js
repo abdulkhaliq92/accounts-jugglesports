@@ -36,6 +36,7 @@ import AddClient from './AddClient';
 import InvoiceType from './InvoiceType';
 import axios from 'axios'
 import { useLocation } from 'react-router-dom'
+import Logo from '../svgIcons/Logo'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -278,7 +279,8 @@ const Invoice = () => {
                     {/* <Grid item>
                         <Avatar alt="Logo" variant='square' src="logo.png" className={classes.large} />
                     </Grid> */}
-                    <img style={{width: '300px', marginTop:'30px', height:'70px'}} src="https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png" alt="arc-invoice" />
+                    {/* <img style={{width: '300px', marginTop:'30px', height:'70px'}} src="https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png" alt="arc-invoice" /> */}
+                    <Logo style={{width: '300px', marginTop:'30px', height:'70px'}} />
                     <Grid item>
                         <InvoiceType type={type} setType={setType} />
                         Invoice #:

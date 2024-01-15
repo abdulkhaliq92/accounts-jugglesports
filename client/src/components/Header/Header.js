@@ -13,6 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import Logo from '../svgIcons/Logo'
 // import axios from 'axios'
 
 
@@ -116,7 +117,8 @@ const Header = () => {
 
     if(!user) return (
         <div className={styles.header2}>
-         <img style={{width: '200px', cursor: 'pointer'}} onClick={()=> history.push('/')} src="https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png" alt="arc-invoice" />
+         {/* <img style={{width: '200px', cursor: 'pointer'}} onClick={()=> history.push('/')} src="https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png" alt="arc-invoice" /> */}
+         <Logo onClick={()=> history.push('/')} width={200} />
         <button onClick={()=> history.push('/login')} className={styles.login}>Get started</button>
         </div>
     )

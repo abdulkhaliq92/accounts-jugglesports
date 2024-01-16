@@ -9,8 +9,6 @@ import nodemailer from 'nodemailer'
 import pdf from 'html-pdf'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-import puppeteer from 'puppeteer';
-
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -86,24 +84,14 @@ app.post('/send-pdf', (req, res) => {
 // npm link phantomjs-prebuilt
 
 //CREATE AND SEND PDF INVOICE
-//CREATE AND SEND PDF INVOICE
 app.post('/create-pdf', (req, res) => {
-    console.log(req.body);
-
-    // Generate PDF and handle the response
-    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Error generating PDF' });
-        } else {
-            console.log(result);  // Log additional details if needed
-            res.status(200).json({ success: true, message: 'PDF generated successfully' });
+    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
+        if(err) {
+            res.send(Promise.reject());
         }
+        res.send(Promise.resolve());
     });
 });
-
-
-
 
 //SEND PDF INVOICE
 app.get('/fetch-pdf', (req, res) => {
@@ -124,4 +112,3 @@ mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
 
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
-

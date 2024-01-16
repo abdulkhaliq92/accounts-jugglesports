@@ -83,20 +83,31 @@ app.post('/send-pdf', (req, res) => {
 // npm link html-pdf
 // npm link phantomjs-prebuilt
 
-//CREATE AND SEND PDF INVOICE
+// CREATE AND SEND PDF INVOICE
 app.post('/create-pdf', (req, res) => {
     pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
-        if(err) {
-            res.send(Promise.reject());
+        if (err) {
+            res.status(500).send('Error creating PDF'); // Send an error response
+        } else {
+            res.status(200).send('PDF created successfully'); // Send a success response
         }
-        res.send(Promise.resolve());
     });
 });
 
-//SEND PDF INVOICE
+// SEND PDF INVOICE
 app.get('/fetch-pdf', (req, res) => {
-     res.sendFile(`${__dirname}/invoice.pdf`)
-})
+    // You should handle errors here in case the file does not exist
+    const pdfPath = `${__dirname}/invoice.pdf`;
+
+    // Check if the file exists before sending it
+    fs.access(pdfPath, fs.constants.F_OK, (err) => {
+        if (err) {
+            res.status(404).send('PDF not found'); // Send a 404 error if the file is not found
+        } else {
+            res.sendFile(pdfPath); // Send the PDF file if it exists
+        }
+    });
+});
 
 
 app.get('/', (req, res) => {

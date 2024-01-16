@@ -138,12 +138,29 @@ const InvoiceDetails = () => {
       balanceDue: toCommas(total - totalAmountReceived),
       company: company,
   })
-      .then(() => axios.get(`${process.env.REACT_APP_API}/fetch-pdf`, { responseType: 'blob' }))
-      .then((res) => {
-        const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
+    .then(() => {
+      return axios.get(`${process.env.REACT_APP_API}/fetch-pdf`, {
+        responseType: 'blob',
+      });
+    })
+    .then((res) => {
+      const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
 
-        saveAs(pdfBlob, invoice.client.name + ' - ' + moment(invoice.createdAt).format("DD-MM-YYYY") + '.pdf')
-      }).then(() =>  setDownloadStatus('success'))
+      const fileName =
+        invoice.client.name +
+        ' - ' +
+        moment(invoice.createdAt).format('DD-MM-YYYY') +
+        '.pdf';
+
+      saveAs(pdfBlob, fileName);
+      setDownloadStatus('success');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+
+      // Handle the error and set download status to 'error'
+      setDownloadStatus('error');
+    });
   }
 
 

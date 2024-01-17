@@ -123,13 +123,12 @@ const Modal = ({ setOpen, open, invoice }) => {
 
 
     const handleSubmitPayment =(e)=> {
-      console.log("clicked");
-        // e.preventDefault()
-        //   dispatch(updateInvoice(invoice._id, updatedInvoice))
-        //   .then(() => {
-        //     handleClose()
-        //     window.location.reload()
-        //   })
+        e.preventDefault()
+          dispatch(updateInvoice(invoice._id, updatedInvoice))
+          .then(() => {
+            handleClose()
+            window.location.reload()
+          })
           // clear()
     }
 

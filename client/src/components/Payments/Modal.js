@@ -145,6 +145,9 @@ const Modal = ({ setOpen, open, invoice }) => {
     { title: 'Cash'},
     { title: 'Credit Card'},
     { title: 'PayPal'},
+    { title: 'Western Union'},
+    { title: 'Money Gram'},
+    { title: 'Zelle'},
     { title: 'Others'},
   ]
 
@@ -166,7 +169,7 @@ const Modal = ({ setOpen, open, invoice }) => {
                 fullWidth 
                 style={{padding: 10}} 
                 variant="outlined" 
-                onChange={(e) => setPayment({...payment, amountPaid: e.target.value})}
+                onChange={(e) => setPayment({...payment, amountPaid: e.target.value > (Number(invoice.total) - Number(invoice.totalAmountReceived)) ? '' : e.target.value})}
                 value={payment.amountPaid}
             />
 

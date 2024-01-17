@@ -8,7 +8,7 @@ const PaymentHistory = ({ paymentRecords}) => {
 
   
     return (
-  <div className="tabs">
+  <div className="tabs" id='payment-history'>
     <div className="tab">
       <input type="checkbox" id="chck1" />
       <label className="tab-label" htmlFor="chck1">Payment History <span className={styles.totalUnpaid}>{paymentRecords?.length}</span><span className={styles.space}></span></label>
@@ -24,7 +24,7 @@ const PaymentHistory = ({ paymentRecords}) => {
          {paymentRecords?.map((record) => (
            <tr key={record._id}>
             <td>{moment(record.datePaid).format('MMMM Do YYYY')}</td>
-            <td>{toCommas(record.amountPaid)}</td>
+            <td>{toCommas(record.amountPaid ? record.amountPaid : 0)}</td>
             <td>{record.paymentMethod}</td>
           </tr>
 

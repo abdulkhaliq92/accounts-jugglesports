@@ -1,9 +1,32 @@
+#payment-history{
+    width: 49%;
+    margin: unset;
+    float: left;
+  }
+input:checked ~ .tab-content{
+padding: 0;
+}
+
+.tab-content td, .tab-content th {
+    text-align: center;
+    font-size: 14px;
+    line-height: 11px;
+}
+.tab-label{
+    padding: 0.85em;
+}
 @media print {
     @page {
       size: A4;
       margin: 0;
     }
-    footer, header, nav, .tabs, #top-buttons, #header{
+    footer, header, nav, #top-buttons, #header{
+        display: none;
+    }
+    .tab-label{
+        color: #000;
+    }
+    .tab-label::after{
         display: none;
     }
 
@@ -14,7 +37,7 @@
     }
     #contentToPrint{
         all:unset;
-        position: absolute;
+        /* position: absolute; */
     }
     #logo{
         padding: 0 !important;

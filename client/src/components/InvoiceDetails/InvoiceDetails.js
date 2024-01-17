@@ -205,6 +205,7 @@ const iconSize = {height: '18px', width: '18px', marginRight: '10px', color: 'gr
 const [open, setOpen ] = useState(false)
 
 
+
   function checkStatus() {
     return totalAmountReceived >= total ? "green"
          : status === "Partial" ? "#1976d2"
@@ -474,6 +475,7 @@ if(!invoice) {
                 />
                 Edit Invoice
                 </button>
+                {totalAmountReceived >= total ? '' :
                 <button 
                   // disabled={status === 'Paid' ? true : false}
                   className={styles.btn} 
@@ -482,13 +484,9 @@ if(!invoice) {
                 /> 
                 Receive Full/Partial Payment
                 </button>
+                }
             </div>
-             )}
-
-             {invoice?.paymentRecords.length !== 0 && (
-                <PaymentHistory paymentRecords={invoiceData?.paymentRecords} />
-             )}
-        
+             )}        
             <Modal open={open} setOpen={setOpen} invoice={invoice}/>
             <div className={styles.invoiceLayout} id="contentToPrint">
         <Container>
@@ -594,7 +592,9 @@ if(!invoice) {
                 <div className={styles.addButton}>
                 </div>
             </div>
-                
+            {invoice?.paymentRecords.length !== 0 && (
+                <PaymentHistory paymentRecords={invoiceData?.paymentRecords} id='history' />
+             )}
                 <div className={styles.invoiceSummary} id='summary'>
                     <div className={styles.summary}>Invoice Summary</div>
                     <div className={styles.summaryItem}>
@@ -620,7 +620,6 @@ if(!invoice) {
                     </div>
                     
                 </div>
-
                 <div className={styles.note} id='notes'>
                     <h4 style={{marginLeft: '-10px'}}>Note/Payment Info</h4>
                     <p style={{fontSize: '14px'}}>{invoiceData.notes}</p>

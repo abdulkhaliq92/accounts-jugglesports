@@ -433,7 +433,7 @@ const [open, setOpen ] = useState(false)
 
 
 const printDiv = () => {
-  document.title = client.name + " - USD" + total; // Change this to your desired title
+  document.title = client.name + " - " + moment(selectedDate).format("DD-MM-YYYY"); // Change this to your desired title
   window.print();
 };
 
@@ -459,11 +459,12 @@ if(!invoice) {
                   Send to Customer
                   </ProgressButton> */}
               
-                <ProgressButton style={{width: '200px'}}
+                {/* <ProgressButton style={{width: '200px'}}
                   onClick={createAndDownloadPdf} 
                   state={downloadStatus}>
                   Download PDF
-                </ProgressButton>
+                </ProgressButton> */}
+                <button onClick={printDiv} className={styles.btn} >Download PDF</button>
 
                 <button 
                 className={styles.btn}  
@@ -473,7 +474,6 @@ if(!invoice) {
                 />
                 Edit Invoice
                 </button>
-                  <button onClick={printDiv} className={styles.btn} >Print</button>
                 <button 
                   // disabled={status === 'Paid' ? true : false}
                   className={styles.btn} 
@@ -529,10 +529,12 @@ if(!invoice) {
                     {invoice?.creator?.includes(user?.result._id) && (
                       <Container style={{marginBottom: '20px'}}>
                         <Typography variant="overline" style={{color: 'gray'}} gutterBottom>From</Typography>
-                        <Typography variant="subtitle2">{invoice?.businessDetails?.data?.data?.businessName}</Typography>
-                        <Typography variant="body2">{invoice?.businessDetails?.data?.data?.email}</Typography>
-                        <Typography variant="body2">{invoice?.businessDetails?.data?.data?.phoneNumber}</Typography>
-                        <Typography variant="body2" gutterBottom>{invoice?.businessDetails?.data?.data?.address}</Typography>
+                        <Typography variant="subtitle2" style={{fontWeight: 'bold', fontSize:'15px'}}>Juggle Sports</Typography>
+                        <Typography variant="body2">jugglesports@gmail.com</Typography>
+                        <Typography variant="body2">alnoorind@gmail.com</Typography>
+                        <Typography variant="body2">0092-347-4931430</Typography>
+                        <Typography variant="body2">0092-300-6197746</Typography>
+                        <Typography variant="body2" gutterBottom>Defence Road Near Nadra Office Sialkot (51310) PAKISTAN.</Typography>
                       </Container>
                     )}
                     <Container>

@@ -1,0 +1,34 @@
+@media print {
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    footer, header, nav, .tabs, #top-buttons, #header{
+        display: none;
+    }
+
+    /* Add other print-specific styles here */
+
+    #item-table *{
+        font-size: 13px;
+    }
+    #contentToPrint{
+        all:unset;
+        position: absolute;
+    }
+    #logo{
+        padding: 0 !important;
+    }
+
+    #summary{
+        width: 50%;
+        display: block;
+        float: right;
+    }
+    #notes{
+        margin-top: 20px;
+        display: block;
+        clear:both;
+    }
+
+  }

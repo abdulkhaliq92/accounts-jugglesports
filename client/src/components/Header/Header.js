@@ -123,7 +123,7 @@ const Header = () => {
         </div>
     )
     return (
-        <div className={styles.header}>
+        <div className={styles.header} id='header'>
             <div className={classes.root}>
       <div>
         <Button

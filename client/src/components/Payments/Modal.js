@@ -123,12 +123,13 @@ const Modal = ({ setOpen, open, invoice }) => {
 
 
     const handleSubmitPayment =(e)=> {
-        e.preventDefault()
-          dispatch(updateInvoice(invoice._id, updatedInvoice))
-          .then(() => {
-            handleClose()
-            window.location.reload()
-          })
+      console.log("clicked");
+        // e.preventDefault()
+        //   dispatch(updateInvoice(invoice._id, updatedInvoice))
+        //   .then(() => {
+        //     handleClose()
+        //     window.location.reload()
+        //   })
           // clear()
     }
 
@@ -198,7 +199,7 @@ const Modal = ({ setOpen, open, invoice }) => {
 
             </DialogContent>
             <DialogActions>
-            <Button autoFocus onClick={handleSubmitPayment} variant="contained" style={{marginRight: '25px'}} >
+            <Button autoFocus onClick={handleSubmitPayment} variant="contained" style={{marginRight: '25px'}} disabled={(!payment.amountPaid || payment.amountPaid <= 0) || (!payment.paymentMethod)}>
                 Save Record
             </Button>
             </DialogActions>

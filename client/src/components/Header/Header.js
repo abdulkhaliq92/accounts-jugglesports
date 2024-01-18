@@ -116,7 +116,7 @@ const Header = () => {
 
 
     if(!user) return (
-        <div className={styles.header2}>
+        <div className={styles.header2} id='header'>
          {/* <img style={{width: '200px', cursor: 'pointer'}} onClick={()=> history.push('/')} src="https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png" alt="arc-invoice" /> */}
          <Logo onClick={()=> history.push('/')} width={200} />
         <button onClick={()=> history.push('/login')} className={styles.login}>Get started</button>

@@ -467,3 +467,43 @@ input:checked ~ .tab-content {
   outline: 0 !important;
   border-bottom-color: #ffab00 !important;
 }
+
+
+/* Target devices with a maximum width of 767 pixels (typical for mobile devices) */
+@media only screen and (max-width: 767px) {
+  #main-site-logo svg {
+    width: 90% !important;
+    margin-top: 8em;
+  }
+  #header{
+    display: none;
+  }
+  #invoices{
+    width: 100% !important;
+  }
+  div#status {
+    text-align: center !important;
+    padding-left: 17px;
+    width: 100%;
+  }
+  .flex-mobile { display: flex; flex-direction: column; }
+  #summary{
+    order: 1;
+  }
+  #payment-history{
+    order: 2;
+    width: 100% !important;
+    margin-top: 20px !important;
+  }
+  #contentToPrint form{
+    padding: 10px !important;
+    margin-bottom: 12em;
+  }
+
+  .add-customer{
+    width: 100% !important;
+    margin-bottom: 30px !important;
+  }
+
+}
+

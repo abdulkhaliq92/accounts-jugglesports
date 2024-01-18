@@ -76,7 +76,7 @@ const Login = () => {
 
     return (
     <>
-      <center>  
+      <center id="main-site-logo">  
         <Logo width={1000} style={{marginTop: '60px'}} />
         <h1 style={{marginTop: '20px'}}>Invoicing System</h1>
       </center>

@@ -310,7 +310,7 @@ const Invoice = () => {
             <Divider />
             <Container>
                 <Grid container justifyContent="space-between" style={{marginTop: '40px'}} >
-                    <Grid item style={{width: '50%'}}>
+                    <Grid item style={{width: '50%'}} className='add-customer'>
                         <Container>
                             <Typography variant="overline" style={{color: 'gray', paddingRight: '3px'}} gutterBottom>Bill to</Typography>
                             
@@ -355,7 +355,7 @@ const Invoice = () => {
                         </Container>
                     </Grid>
 
-                    <Grid item style={{marginRight: 20, textAlign: 'right'}}>
+                    <Grid item style={{marginRight: 20, textAlign: 'right'}} id='status'>
                         <Typography variant="overline" style={{color: 'gray'}} gutterBottom>Status</Typography>
                         <Typography variant="h6" gutterBottom style={{color: (type === 'Receipt' ? 'green' : 'red')}}>{(type === 'Receipt' ? 'Paid' : 'Unpaid')}</Typography>
                         <Typography variant="overline" style={{color: 'gray'}} gutterBottom>Date</Typography>

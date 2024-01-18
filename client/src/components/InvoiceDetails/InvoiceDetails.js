@@ -544,7 +544,7 @@ if(!invoice) {
                     </Container>
                 </Grid>
 
-                <Grid item style={{marginRight: 20, textAlign: 'right'}}>
+                <Grid item style={{marginRight: 20, textAlign: 'right'}} id='status'>
                     <Typography variant="overline" style={{color: 'gray'}} >No: </Typography>
                     <Typography variant="body2">{invoiceData?.invoiceNumber}</Typography>
                     <Typography variant="overline" style={{color: 'gray'}} gutterBottom>Status</Typography>
@@ -592,6 +592,7 @@ if(!invoice) {
                 <div className={styles.addButton}>
                 </div>
             </div>
+            <div className='flex-mobile'>
             {invoice?.paymentRecords.length !== 0 && (
                 <PaymentHistory paymentRecords={invoiceData?.paymentRecords} id='history' />
              )}
@@ -619,6 +620,7 @@ if(!invoice) {
                         <h4 style={{color: "black", fontSize: "18px", lineHeight: "8px"}}>{currency} {toCommas(total - totalAmountReceived)}</h4>
                     </div>
                     
+                </div>
                 </div>
                 <div className={styles.note} id='notes'>
                     <h4 style={{marginLeft: '-10px'}}>Note/Payment Info</h4>

@@ -260,7 +260,8 @@ const downloadDesktopPDF = () =>{
         doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-      doc.save(client.name + " - " + moment(selectedDate).format("DD-MM-YYYY"));
+      const filename = `${client.name} - ${moment(selectedDate).format("DD-MM-YYYY")}.pdf`;
+      doc.save(filename);    
     });
   }
 

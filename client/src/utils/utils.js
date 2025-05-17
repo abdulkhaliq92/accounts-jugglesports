@@ -1,4 +1,6 @@
-
 export function toCommas(value) {
-    return value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const num = Number(value ?? 0);
+  return num
+    .toFixed(2)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

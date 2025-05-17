@@ -142,7 +142,7 @@ const Invoice = () => {
 
     const clientsProps = {
         options: clients,
-        getOptionLabel: (option) => option.name
+        getOptionLabel: (option) => option?.name ?? '',
       };
       
     

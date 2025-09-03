@@ -251,6 +251,7 @@ const Header = () => {
             onClick={() => routerHistory.push("/")}   // ← fixed
             src="https://i.postimg.cc/RFzbLWZ1/juggle-sports-logo.png"
             alt="arc-invoice"
+            crossOrigin="anonymous"
           />
         </div>
 

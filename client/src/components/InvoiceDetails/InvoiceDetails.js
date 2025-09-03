@@ -563,7 +563,9 @@ const InvoiceDetails = () => {
       const canvas = await html2canvas(node, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
+        imageTimeout: 15000,
+        backgroundColor: "#ffffff",
         logging: false
       })
       const imgData = canvas.toDataURL('image/png')

@@ -1,13 +1,22 @@
-.loader {
+/* .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
   border-top: 16px solid #1976d2;
   width: 150px;
   height: 150px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
+  -webkit-animation: spin 2s linear infinite; 
   animation: spin 2s linear infinite;
   
+} */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid lightblue;
+  border-right-color: orange;
+  animation: l2 1s infinite linear;
 }
+@keyframes l2 {to{transform: rotate(1turn)}}
 
 /* Safari */
 @-webkit-keyframes spin {
@@ -35,3 +44,6 @@
   justify-content: center;
   padding: 100px;
 }
+
+
+/* HTML: <div class="loader"></div> */

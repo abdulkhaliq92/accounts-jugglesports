@@ -1,0 +1,177 @@
+/* src/components/Auth/Login.css */
+.login-container {
+    min-height: 100vh;
+    /* background: linear-gradient(135deg, #f8fafc 0%, rgba(16, 185, 129, 0.05) 50%, #f1f5f9 100%); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (prefers-color-scheme: dark) {
+    .login-container {
+      background: linear-gradient(135deg, #0f172a 0%, rgba(16, 185, 129, 0.1) 50%, #1e293b 100%);
+    }
+  }
+  
+  /* .background-effects { position: absolute; inset: 0; overflow: hidden; } */
+  .bg-circle {
+    position: absolute; width: 20rem; height: 20rem; border-radius: 50%;
+    filter: blur(3rem); animation: pulse 4s ease-in-out infinite;
+  }
+  .bg-circle-1 { top: -10rem; right: -10rem; background: rgba(16, 185, 129, 0.1); }
+  .bg-circle-2 { bottom: -10rem; left: -10rem; background: rgba(148, 163, 184, 0.1); animation-delay: 1s; }
+  @keyframes pulse { 0%, 100% { opacity: .5; transform: scale(1);} 50% { opacity: .8; transform: scale(1.1);} }
+  
+  .login-wrapper { width: 100%; max-width: 38rem; display: flex; flex-direction: column; gap: 2rem; position: relative; z-index: 10; }
+  
+  .header-section { text-align: center; display: flex; flex-direction: column; gap: 1.5rem; }
+  .logo-container {
+    margin: 0 auto; width: 5rem; height: 5rem;
+    background: linear-gradient(135deg, #059669, #047857);
+    border-radius: 1.5rem; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25);
+    transform: scale(1); transition: transform .3s ease;
+  }
+  .logo-container:hover { transform: scale(1.05); }
+  .logo-icon { width: 2.5rem; height: 2.5rem; color: #fff; }
+  
+  .title-section { display: flex; flex-direction: column; gap: .75rem; }
+  .main-title {
+    font-size: 2.25rem; font-weight: 700;
+    background: linear-gradient(to right, #1e293b, #475569);
+    -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.025em;
+  }
+  @media (prefers-color-scheme: dark) {
+    .main-title { background: linear-gradient(to right, #ffffff, #cbd5e1); -webkit-background-clip: text; background-clip: text; }
+  }
+  .subtitle { color: #fff; font-size: 1rem; font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .subtitle { color: #94a3b8; } }
+  
+  .form-card {
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,.1);
+    background: rgba(255,255,255,.8); backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,.2); border-radius: 1rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    .form-card { background: rgba(15,23,42,.8); border: 1px solid rgba(51,65,85,.5); box-shadow: 0 25px 50px -12px rgba(0,0,0,.2); }
+  }
+  
+  .form-header { display: flex; flex-direction: column; gap: 1.5rem; padding: 2rem 2rem 0; }
+  .form-icon-container {
+    margin: 0 auto; width: 4rem; height: 4rem;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 1rem; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 25px -5px rgba(16,185,129,.25); position: relative;
+  }
+  .form-icon { width: 2rem; height: 2rem; color: #fff; }
+  .icon-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(16,185,129,.5), transparent); border-radius: 1rem; }
+  
+  .form-title-section { text-align: center; display: flex; flex-direction: column; gap: .75rem; }
+  .form-title {
+    font-size: 1.875rem; font-weight: 700;
+    background: linear-gradient(to right, #1e293b, #475569);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  @media (prefers-color-scheme: dark) {
+    .form-title { background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; background-clip: text; }
+  }
+  .form-description { color: #64748b; font-size: 1rem; line-height: 1.6; }
+  @media (prefers-color-scheme: dark) { .form-description { color: #94a3b8; } }
+  
+  .form-content { display: flex; flex-direction: column; gap: 2rem; padding: 0 2rem 2rem; }
+  .login-form { display: flex; flex-direction: column; gap: 1.5rem; }
+  
+  .name-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .field-group { display: flex; flex-direction: column; gap: .75rem; }
+  .field-label { display: block; font-size: .875rem; font-weight: 600; color: #374151; }
+  @media (prefers-color-scheme: dark) { .field-label { color: #d1d5db; } }
+  
+  .input-wrapper { position: relative; }
+  .input-icon {
+    position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+    width: 1.25rem; height: 1.25rem; color: #9ca3af; transition: color .2s ease;
+  }
+  .input-wrapper:focus-within .input-icon { color: #10b981; }
+  
+  .form-input {
+    width: 100%; padding: .75rem 1rem .75rem 3rem; height: 3rem;
+    background: rgba(248,250,252,.5); border: 1px solid #e2e8f0; border-radius: .75rem;
+    transition: all .2s ease; font-size: 1rem; color: #1e293b;
+  }
+  .form-input:focus { outline: none; box-shadow: 0 0 0 2px rgba(16,185,129,.2); border-color: #10b981; }
+  .form-input:hover { border-color: #cbd5e1; }
+  @media (prefers-color-scheme: dark) {
+    .form-input { background: rgba(51,65,85,.5); border-color: #475569; color: #f1f5f9; }
+    .form-input:hover { border-color: #64748b; }
+  }
+  .password-input { padding-right: 3rem; }
+  
+  .password-toggle {
+    position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: #9ca3af; transition: color .2s ease; padding: .25rem;
+  }
+  .password-toggle:hover { color: #10b981; }
+  .toggle-icon { width: 1.25rem; height: 1.25rem; }
+  
+  .submit-button {
+    width: 100%; height: 3rem; font-size: 1rem; font-weight: 600;
+    background: linear-gradient(to right, #059669, #047857); color: #fff;
+    box-shadow: 0 10px 25px -5px rgba(16,185,129,.25);
+    border: none; border-radius: .75rem; cursor: pointer; transition: all .3s ease; transform: scale(1);
+  }
+  .submit-button:hover {
+    background: linear-gradient(to right, #047857, #065f46);
+    box-shadow: 0 20px 40px -10px rgba(16,185,129,.3); transform: scale(1.02);
+  }
+  .submit-button:disabled { opacity: .5; cursor: not-allowed; transform: scale(1); }
+  
+  .loading-content, .button-content { display: flex; align-items: center; justify-content: center; gap: .75rem; }
+  .spinner {
+    width: 1.25rem; height: 1.25rem;
+    border: 2px solid rgba(255,255,255,.3); border-top: 2px solid #fff;
+    border-radius: 50%; animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  .arrow-icon { width: 1.25rem; height: 1.25rem; transition: transform .2s ease; }
+  .submit-button:hover .arrow-icon { transform: translateX(.25rem); }
+  
+  .form-footer { text-align: center; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; }
+  @media (prefers-color-scheme: dark) { .form-footer { border-top-color: #475569; } }
+  
+  .switch-text { color: #64748b; font-size: .875rem; margin-bottom: .5rem; }
+  @media (prefers-color-scheme: dark) { .switch-text { color: #94a3b8; } }
+  
+  .switch-button {
+    color: #059669; font-weight: 600; font-size: 1rem;
+    background: none; border: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: .25rem; transition: color .2s ease;
+  }
+  .switch-button:hover { color: #047857; }
+  @media (prefers-color-scheme: dark) {
+    .switch-button { color: #34d399; }
+    .switch-button:hover { color: #10b981; }
+  }
+  .sparkle-icon { width: 1rem; height: 1rem; transition: transform .2s ease; }
+  .switch-button:hover .sparkle-icon { transform: rotate(12deg); }
+  
+  .forgot-password { text-align: center; }
+  .forgot-link {
+    font-size: .875rem; color: #6b7280; text-decoration: none;
+    transition: color .2s ease;
+  }
+  .forgot-link:hover { color: #374151; }
+  @media (prefers-color-scheme: dark) {
+    .forgot-link { color: #9ca3af; }
+    .forgot-link:hover { color: #e5e7eb; }
+  }
+  
+  .copyright { text-align: center; font-size: .75rem; color: #6b7280; }
+  @media (prefers-color-scheme: dark) { .copyright { color: #9ca3af; } }
+  
+
+.login-logo{
+    margin: 0 auto;
+}

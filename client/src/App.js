@@ -26,7 +26,7 @@ function App() {
     <div>
       <BrowserRouter>
       <SnackbarProvider>
-     {user && <NavBar />} 
+     {/* {user && <NavBar />}  */}
       <Header />
         <Switch>
           <Route path="/" exact component={Login} />
@@ -43,7 +43,7 @@ function App() {
           <Redirect exact from="/new-invoice" to="/invoice" />
 
         </Switch>
-        <Footer />
+        {/* <Footer /> */}
         </SnackbarProvider>
       </BrowserRouter>
     </div>

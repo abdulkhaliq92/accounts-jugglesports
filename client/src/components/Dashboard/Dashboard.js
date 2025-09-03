@@ -1,226 +1,219 @@
-import React, { useEffect } from 'react'
-import { toCommas } from '../../utils/utils'
-import styles from './Dashboard.module.css'
-import { useHistory, useLocation } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { getInvoicesByUser } from '../../actions/invoiceActions'
-import Empty from '../svgIcons/Empty'
-import Chart from './Chart'
-// import Donut from './Donut'
-import moment from 'moment'
-import { Check, Pie, Bag, Card, Clock, Frown } from './Icons'
-import Spinner from '../Spinner/Spinner'
+// Basic CSS + JS (no Tailwind, no shadcn)
+// Works with your existing Redux store, actions, and utilities.
 
+import React, { useEffect, useMemo } from "react";
+import { useHistory, useLocation } from "react-router-dom"; // v6 note at bottom
+import { useDispatch, useSelector } from "react-redux";
+
+import { getInvoicesByUser } from "../../actions/invoiceActions";
+import { toCommas } from "../../utils/utils";
+
+import Empty from "../svgIcons/Empty";
+import Spinner from "../Spinner/Spinner";
+import Chart from "./Chart"; // optional; remove section if you don't want it
+import { Check, Pie, Bag, Card as CardIcon, Clock, Frown } from "./Icons";
+
+import "./Dashboard.css";
 
 const Dashboard = () => {
+  const location = useLocation();
+  const history = useHistory(); // v6 => useNavigate
+  const dispatch = useDispatch();
 
-    const location = useLocation()
-    const history = useHistory()
-    const dispatch = useDispatch()
-    const user = JSON.parse(localStorage.getItem('profile'))
-    const { invoices, isLoading } = useSelector((state) => state?.invoices)
-    // const unpaid = invoices?.filter((invoice) => (invoice.status === 'Unpaid') || (invoice.status === 'Partial'))
-    const overDue = invoices?.filter((invoice) => invoice.dueDate <= new Date().toISOString())
+  const user = useMemo(() => JSON.parse(localStorage.getItem("profile")), []);
+  const { invoices = [], isLoading } = useSelector((s) => s?.invoices || {});
 
-
-    let paymentHistory = []
-    for(let i = 0; i < invoices.length; i++) {
-        let history = []
-        if(invoices[i].paymentRecords !== undefined) {
-            history = [...paymentHistory, invoices[i].paymentRecords]
-            paymentHistory = [].concat.apply([], history);
-        }
-        
+  // Fetch invoices when route changes
+  useEffect(() => {
+    if (user?.result?._id || user?.result?.googleId) {
+      dispatch(getInvoicesByUser({ search: user.result._id || user.result.googleId }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location, dispatch]);
 
+  // Redirect if not logged in
+  useEffect(() => {
+    if (!user) history.push("/login");
+  }, [user, history]);
 
-    //sort payment history by date
-   const sortHistoryByDate =  paymentHistory.sort(function(a, b) {
-        var c = new Date(a.datePaid);
-        var d = new Date(b.datePaid);
-        return d-c;
+  // ---------- Derivations ----------
+  const overDue = useMemo(
+    () =>
+      invoices.filter((inv) => {
+        const d = inv?.dueDate ? new Date(inv.dueDate) : null;
+        return d && d <= new Date();
+      }),
+    [invoices]
+  );
+
+  const paymentHistory = useMemo(() => {
+    const all = invoices
+      .filter((inv) => Array.isArray(inv.paymentRecords) && inv.paymentRecords.length)
+      .flatMap((inv) => inv.paymentRecords.map((r) => ({ ...r })));
+    return all.sort((a, b) => {
+      const A = a?.datePaid ? new Date(a.datePaid).getTime() : 0;
+      const B = b?.datePaid ? new Date(b.datePaid).getTime() : 0;
+      return B - A; // newest first
     });
-    
-    
-    let totalPaid = 0
-    for(let i = 0; i < invoices.length; i++) {
-        if(invoices[i].totalAmountReceived !== undefined) {
-            totalPaid += invoices[i].totalAmountReceived
-        }
-        
-    }
+  }, [invoices]);
 
-    let totalAmount = 0
-    for(let i = 0; i < invoices.length; i++) {
-        totalAmount += invoices[i].total
-    }
-   
-    
-    useEffect(() => {
-        dispatch(getInvoicesByUser({search: user?.result._id || user?.result?.googleId}));
-        // eslint-disable-next-line
-    }, [location, dispatch]);
-   
+  const totalPaid = useMemo(
+    () => invoices.reduce((sum, inv) => sum + (Number(inv?.totalAmountReceived) || 0), 0),
+    [invoices]
+  );
 
-    const unpaidInvoice = invoices?.filter((invoice) => invoice.status === 'Unpaid')
-    const paid = invoices?.filter((invoice) => invoice.status === 'Paid')
-    const partial = invoices?.filter((invoice) => invoice.status === 'Partial')
-    
-    if(!user) {
-        history.push('/login')
-      }
+  const totalAmount = useMemo(
+    () => invoices.reduce((sum, inv) => sum + (Number(inv?.total) || 0), 0),
+    [invoices]
+  );
 
+  const unpaidInvoice = useMemo(() => invoices.filter((i) => i.status === "Unpaid"), [invoices]);
+  const paid = useMemo(() => invoices.filter((i) => i.status === "Paid"), [invoices]);
+  const partial = useMemo(() => invoices.filter((i) => i.status === "Partial"), [invoices]);
 
-      if(isLoading) {
-        return  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', paddingTop: '20px'}}>
-            <Spinner />
-        </div>
-      }
+  const pctPaid = totalAmount > 0 ? Math.min(100, Math.round((totalPaid / totalAmount) * 100)) : 0;
 
-      if(invoices.length === 0) {
-        return  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', paddingTop: '20px'}}>
-            {/* <Spinner /> */}
-          <Empty />
-        <p style={{padding: '40px', color: 'gray'}}>Nothing to display. Click the plus icon to start creating</p>
-        </div>
-      }
+  const fmtDate = (iso) =>
+    iso
+      ? new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
+      : "-";
 
-      
+  // ---------- States ----------
+  if (isLoading) {
     return (
-        <div className={styles.pageContainer}>
-           
-    
-            <section className={styles.stat}>
-            <ul className={styles.autoGrid}>
-                        <li className={styles.listItem} style={{backgroundColor: '#1976d2', color: 'white'}}>
-                            <div>
-                                <p>{toCommas(totalPaid)}</p>
-                                <h2 style={{color: 'white'}}>Payment Received</h2>
-                            </div>
-                            <div>
-                                <Check />
-                            </div>
-                        </li>
+      <div className="dash-center">
+        <Spinner />
+      </div>
+    );
+  }
 
-                        <li className={styles.listItem} >
-                            <div>
-                                <p>{toCommas(totalAmount - totalPaid)}</p>
-                                <h2>Pending Amount</h2>
-                            </div>
-                            <div>
-                                <Pie />
-                            </div>
-                        </li>
+  if (!invoices?.length) {
+    return (
+      <div className="dash-center">
+        <Empty />
+        <p className="dash-muted">Nothing to display. Click the plus icon to start creating</p>
+      </div>
+    );
+  }
 
-                        <li className={styles.listItem} >
-                            <div>
-                                <p>{toCommas(totalAmount)}</p>
-                                <h2>Total Amount</h2>
-                            </div>
-                            <div>
-                                <Bag />
-                            </div>
-                        </li>
-
-                        <li className={styles.listItem} >
-                            <div>
-                                <p>{invoices.length}</p>
-                                <h2>Total Invoices</h2>
-                            </div>
-                            <div>
-                                <Card />
-                            </div>
-                        </li>
-
-
-                        <li className={styles.listItem} style={{backgroundColor: '#206841', color: 'white'}}>
-                            <div>
-                                <p>{paid.length}</p>
-                                <h2 style={{color: 'white'}}>Paid Invoices</h2>
-                            </div>
-                            <div>
-                                <Check />
-                            </div>
-                        </li>
-
-                        <li className={styles.listItem} >
-                            <div>
-                                <p>{partial.length}</p>
-                                <h2>Partially Paid Invoices</h2>
-                            </div>
-                            <div>
-                                <Pie />
-                            </div>
-                        </li>
-
-                        <li className={styles.listItem} >
-                            <div>
-                                <p>{unpaidInvoice.length}</p>
-                                <h2>Unpaid Invoices</h2>
-                            </div>
-                            <div>
-                                <Frown />
-                            </div>
-                        </li>
-
-                        <li className={styles.listItem} >
-                            <div>
-                                <p>{overDue.length}</p>
-                                <h2>Overdue</h2>
-                            </div>
-                            <div>
-                                <Clock />
-                            </div>
-                        </li>
-                        
-                 
-                </ul>
-
-            </section>
-
-            {paymentHistory.length !== 0 && (
-            <section>
-                <Chart paymentHistory={paymentHistory} />
-            </section>
-            )}
-
-                <section>
-                <h1 style={{textAlign: 'center', padding: '30px' }}>{paymentHistory.length ? 'Recent Payments' : 'No payment received yet'}</h1>
-                    <div>
-                    <div className={styles.table}>
-                       
-                        <table>
-                            <tbody>
-                            {paymentHistory.length !== 0 && (
-                                <tr>
-                                <th style={{padding: '15px'}}></th>
-                                <th style={{padding: '15px'}}>Paid By</th>
-                                <th style={{padding: '15px'}}>Date Paid</th>
-                                <th style={{padding: '15px'}}>Amount Paid</th>
-                                <th style={{padding: '15px'}}>Payment Method</th>
-                                <th style={{padding: '15px'}}>Note</th>
-                            </tr>
-                            )}
-                            
-                            {sortHistoryByDate.slice(-10).map((record) => (
-                            <tr  className={styles.tableRow} key={record._id}>
-                                <td><button>{record?.paidBy?.charAt(0)}</button></td>
-                                <td>{record.paidBy}</td>
-                                <td>{moment(record.datePaid).format('MMMM Do YYYY')}</td>
-                                <td><h3 style={{color: '#00A86B', fontSize: '14px'}} >{toCommas(record.amountPaid)}</h3></td>
-                                <td>{record.paymentMethod}</td>
-                                <td>{record.note}</td>
-                            </tr>
-
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-                    </div>
-                </section>
-           
+  // ---------- Render ----------
+  return (
+    <div className="dash-page">
+      {/* Header */}
+      <header className="dash-header">
+        <div>
+          <h1 className="dash-title">Dashboard</h1>
+          <p className="dash-sub">A quick overview of your invoices & payments</p>
         </div>
-    )
-}
+        <div className="dash-badge">{pctPaid}% paid</div>
+      </header>
 
-export default Dashboard
+      {/* KPI Grid */}
+      <section className="dash-kpis">
+        <div className="dash-grid">
+          <article className="dash-card">
+            <div className="dash-card__head">
+              <span className="dash-card__label">Payment Received</span>
+              <span className="dash-card__icon"><Check /></span>
+            </div>
+            <div className="dash-card__value">{toCommas(totalPaid)}</div>
+            <div className="dash-card__hint">All-time</div>
+          </article>
+
+          <article className="dash-card">
+            <div className="dash-card__head">
+              <span className="dash-card__label">Pending Amount</span>
+              <span className="dash-card__icon"><Pie /></span>
+            </div>
+            <div className="dash-card__value">{toCommas(Math.max(totalAmount - totalPaid, 0))}</div>
+            <div className="dash-progress">
+              <div className="dash-progress__bar" style={{ width: `${Math.min(100 - pctPaid, 100)}%` }} />
+            </div>
+            <div className="dash-card__hint">{Math.max(100 - pctPaid, 0)}% outstanding</div>
+          </article>
+
+          <article className="dash-card">
+            <div className="dash-card__head">
+              <span className="dash-card__label">Total Amount</span>
+              <span className="dash-card__icon"><CardIcon /></span>
+            </div>
+            <div className="dash-card__value">{toCommas(totalAmount)}</div>
+            <div className="dash-card__hint">{invoices.length} invoices</div>
+          </article>
+
+          <article className="dash-card">
+            <div className="dash-card__head">
+              <span className="dash-card__label">Status</span>
+              <span className="dash-card__icon"><Bag /></span>
+            </div>
+            <ul className="dash-list">
+              <li><span className="dot dot--green" /> <span>Paid</span> <b>{paid.length}</b></li>
+              <li><span className="dot dot--amber" /> <span>Partial</span> <b>{partial.length}</b></li>
+              <li><span className="dot dot--rose" /> <span>Unpaid</span> <b>{unpaidInvoice.length}</b></li>
+              <li><span className="dot dot--deep" /> <span>Overdue</span> <b>{overDue.length}</b></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      {/* Chart (optional) */}
+      {/* {paymentHistory.length > 0 && (
+        <section className="dash-panel">
+          <h2 className="dash-panel__title">Payments Over Time</h2>
+          <div className="dash-panel__body">
+            <Chart paymentHistory={paymentHistory} />
+          </div>
+        </section>
+      )} */}
+
+      {/* Recent Payments */}
+      <section className="dash-panel">
+        <h2 className="dash-panel__title">
+          {paymentHistory.length ? "Recent Payments" : "No payment received yet"}
+        </h2>
+
+        {paymentHistory.length > 0 && (
+          <div className="dash-tableWrap">
+            <table className="dash-table">
+              <thead>
+                <tr>
+                  <th />
+                  <th>Paid By</th>
+                  <th>Date Paid</th>
+                  <th>Amount Paid</th>
+                  <th>Payment Method</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paymentHistory.slice(0, 10).map((r) => (
+                  <tr className="dash-row" key={r?._id}>
+                    <td>
+                      <div className="dash-avatar">
+                        {(r?.paidBy || "?").charAt(0).toUpperCase()}
+                      </div>
+                    </td>
+                    <td className="dash-cell--name">{r?.paidBy || "-"}</td>
+                    <td>{fmtDate(r?.datePaid)}</td>
+                    <td className="dash-amt">{toCommas(Number(r?.amountPaid) || 0)}</td>
+                    <td>{r?.paymentMethod || "-"}</td>
+                    <td className="dash-note">{r?.note || "-"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+/* react-router-dom v6:
+   import { useNavigate, useLocation } from "react-router-dom";
+   const navigate = useNavigate();
+   useEffect(() => { if (!user) navigate("/login"); }, [user, navigate]);
+   // replace history.push("/login") with navigate("/login")
+*/

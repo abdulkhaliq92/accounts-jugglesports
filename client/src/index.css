@@ -216,9 +216,9 @@ main {
   height: 100%;
 }
 
-.nav-item {
+/* .nav-item {
   width: 100%;
-}
+} */
 
 .nav-item:last-child {
   margin-top: auto;
@@ -264,7 +264,7 @@ main {
   transition: var(--transition-speed);
 }
 
-.logo {
+/* .logo {
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 1rem;
@@ -274,12 +274,12 @@ main {
   font-size: 1.5rem;
   letter-spacing: 0.3ch;
   width: 100%;
-}
+} */
 
-.logo svg {
+/* .logo svg {
   transform: rotate(0deg);
   transition: var(--transition-speed);
-}
+} */
 
 .logo-text
 {

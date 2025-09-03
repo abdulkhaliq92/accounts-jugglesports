@@ -418,7 +418,12 @@ export default function Invoices() {
 
   const openInvoice = (id) => history.push(`/invoice/${id}`);
   const editInvoice = (id) => history.push(`/edit/invoice/${id}`);
-  const removeInvoice = (id) => dispatch(deleteInvoice(id, openSnackbar));
+  // const removeInvoice = (id) => dispatch(deleteInvoice(id, openSnackbar));
+  const removeInvoice = (id) => {
+    if (window.confirm("Delete this invoice? This cannot be undone.")) {
+      dispatch(deleteInvoice(id, openSnackbar));
+    }
+  };
 
   if (isLoading) {
     return (

@@ -313,7 +313,7 @@ export default function Invoice() {
               <div className={styles.summaryRow}><span>Subtotal</span><strong>{formatMoney(subTotal, currency)}</strong></div>
               <div className={styles.summaryRow + ' ' + styles.compact}>
                 <span>Tax Rate (%)</span>
-                <input className={styles.input} type="number" value={rates} onChange={(e) => setRates(Number(e.target.value || 0))} />
+                <input className={styles.input} style={{ width:"20%" }} type="number" value={rates} onChange={(e) => setRates(Number(e.target.value || 0))} />
               </div>
               <div className={styles.summaryRow}><span>VAT</span><strong>{formatMoney(vat, currency)}</strong></div>
               <div className={styles.divider} />

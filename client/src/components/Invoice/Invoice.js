@@ -157,12 +157,12 @@ export default function Invoice() {
           </div>
 
           <div className={styles.numberBlock}>
-            <InvoiceType type={type} setType={setType} />
+            {/* <InvoiceType type={type} setType={setType} /> */}
             <label className={styles.fieldInline}>
               <span>Invoice #</span>
               <input
                 className={styles.input}
-                value={invoiceData.invoiceNumber || ''}
+                // value={invoiceData.invoiceNumber || ''}
                 onChange={(e) => setInvoiceData({ ...invoiceData, invoiceNumber: e.target.value.replace(/[^0-9]/g, '') })}
                 inputMode="numeric"
                 maxLength={10}
@@ -354,4 +354,3 @@ function formatMoney(value, currency = 'USD', locale) {
     return `${currency} ${Number(value ?? 0).toFixed(2)}`;
   }
 }
-

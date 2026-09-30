@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 
 import { BRAND_LOGO_SRC, BRAND_NAME } from '@/components/BrandLogo'
 import type { Invoice, PaymentRecord, Profile } from './types'
+import { STAMP_SRC } from './stamp'
 import { deriveStatus, lineAmount, splitMulti, toCommas } from './utils'
 
 const INK = '#0f172a'
@@ -77,6 +78,26 @@ async function loadLogo(): Promise<CachedLogo | null> {
       }
     }
     return cachedLogo
+  } catch {
+    return null
+  }
+}
+
+const STAMP_WIDTH = 120 // pt
+
+// Reads the stamp's natural size so it can be drawn without distortion.
+async function loadStamp(): Promise<{ w: number; h: number } | null> {
+  const src = STAMP_SRC
+  if (!src) return null
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const i = new Image()
+      i.onload = () => resolve(i)
+      i.onerror = () => reject(new Error('stamp decode failed'))
+      i.src = src
+    })
+    if (!img.naturalWidth) return null
+    return { w: STAMP_WIDTH, h: STAMP_WIDTH * (img.naturalHeight / img.naturalWidth) }
   } catch {
     return null
   }
@@ -408,6 +429,19 @@ export async function generateInvoicePdf({ invoice, profile, totalReceived }: Bu
       },
       margin: { left: margin, right: margin },
     })
+
+    // @ts-expect-error -- autotable adds lastAutoTable
+    y = (doc.lastAutoTable?.finalY ?? y) + 10
+  }
+
+  // ===== Signature / stamp (end of content, bottom right) =====
+  const stamp = await loadStamp()
+  if (STAMP_SRC && stamp) {
+    y += 10
+    ensureSpace(doc, y, stamp.h, () => {
+      y = margin
+    })
+    doc.addImage(STAMP_SRC, 'PNG', rightX - stamp.w, y, stamp.w, stamp.h, undefined, 'FAST')
   }
 
   // ===== Footer (every page) =====
